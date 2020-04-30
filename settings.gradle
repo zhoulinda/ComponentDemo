@@ -1,0 +1,1 @@
+include ':app', ':login', ':pay', ':base', ':image', ':net', ':main', ':home', ':mine', ':detail'

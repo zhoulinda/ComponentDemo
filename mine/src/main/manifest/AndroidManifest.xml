@@ -1,0 +1,13 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.linda.mine">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/mine_app_name"
+        android:supportsRtl="true"
+        android:theme="@style/base_AppTheme">
+
+    </application>
+
+</manifest>

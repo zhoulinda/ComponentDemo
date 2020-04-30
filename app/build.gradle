@@ -1,0 +1,32 @@
+apply from: "${rootProject.rootDir}/common_config.gradle"
+project.ext.setAppDefaultConfig project
+
+android {
+    defaultConfig {
+        applicationId "com.example.plugdemo"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+
+    if (!project.ext.isModuleDebug) {
+        implementation project(path: ':detail')
+        implementation project(path: ':login')
+        implementation project(path: ':pay')
+        implementation project(path: ':home')
+        implementation project(path: ':mine')
+    }
+    implementation project(path: ':main')
+}

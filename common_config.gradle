@@ -1,0 +1,87 @@
+project.ext {
+
+    compileSdkVersion = 29
+    buildToolsVersion = "29.0.2"
+    minSdkVersion = 15
+    targetSdkVersion = 29
+    applicationId = "com.linda.componentdemo"
+    versionCode = 1
+    versionName = "1.0"
+
+    //是否允许module单独调试
+    isModuleDebug = false
+    //设置app配置
+    setAppDefaultConfig = {
+        extension -> //extension后续会传入project替代
+            extension.apply plugin: 'com.android.application'
+            extension.description "app"
+            //设置通用Android配置
+            setAndroidConfig extension.android
+            //设置通用依赖配置
+            setDependencies extension.dependencies
+    }
+
+    //设置lib配置
+    setMainDefaultConfig = {
+        extension ->
+            extension.apply plugin: 'com.android.library'
+            extension.description "lib"
+            extension.apply plugin: 'com.jakewharton.butterknife'
+            //设置通用Android配置
+            setAndroidConfig extension.android
+            //设置通用依赖配置
+            setDependencies extension.dependencies
+    }
+
+    //设置lib配置
+    setLibDefaultConfig = {
+        extension ->
+            if (isModuleDebug) {
+                extension.apply plugin: 'com.android.application'
+                extension.description "app"
+            } else {
+                extension.apply plugin: 'com.android.library'
+                extension.description "lib"
+            }
+            extension.apply plugin: 'com.jakewharton.butterknife'
+            //设置通用Android配置
+            setAndroidConfig extension.android
+            //设置通用依赖配置
+            setDependencies extension.dependencies
+    }
+
+    //设置android配置
+    setAndroidConfig = {
+        extension -> //extension 即 android 对象
+            extension.compileSdkVersion 29
+            extension.buildToolsVersion "29.0.2"
+            extension.defaultConfig {
+                minSdkVersion 15
+                targetSdkVersion 29
+                versionCode 1
+                versionName "1.0"
+
+                testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+                //ARouter 编译生成路由
+                javaCompileOptions {
+                    annotationProcessorOptions {
+                        arguments = [AROUTER_MODULE_NAME: extension.project.getName()]
+                    }
+                }
+            }
+
+    }
+
+
+    //设置依赖
+    setDependencies = {
+        extension ->
+            extension.implementation fileTree(dir: 'libs', include: ['*.jar'])
+            //ARouter 路由apt插件，用于生成相应代码，每个module都需要
+            extension.annotationProcessor 'com.alibaba:arouter-compiler:1.2.2'
+            extension.annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.1'
+    }
+
+
+}
