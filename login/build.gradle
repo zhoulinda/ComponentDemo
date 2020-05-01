@@ -1,5 +1,5 @@
 apply from: "${rootProject.rootDir}/common_config.gradle"
-project.ext.setLibDefaultConfig project
+project.ext.setAppOrLibDefaultConfig project
 
 android {
 
@@ -9,23 +9,6 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
-
-    if (project.ext.isModuleDebug) {
-        compileOptions {
-            sourceCompatibility JavaVersion.VERSION_1_8
-            targetCompatibility JavaVersion.VERSION_1_8
-        }
-    }
-
-    sourceSets {
-        main {
-            if (isModuleDebug) {
-                manifest.srcFile 'src/main/manifest/AndroidManifest.xml'
-            } else {
-                manifest.srcFile 'src/main/AndroidManifest.xml'
-            }
         }
     }
 }

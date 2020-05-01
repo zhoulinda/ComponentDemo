@@ -9,34 +9,35 @@ project.ext {
     versionName = "1.0"
 
     //是否允许module单独调试
-    isModuleDebug = false
+    isModuleDebug = true
+
     //设置app配置
     setAppDefaultConfig = {
-        extension -> //extension后续会传入project替代
+        extension ->
             extension.apply plugin: 'com.android.application'
             extension.description "app"
             //设置通用Android配置
-            setAndroidConfig extension.android
+            setAppAndroidConfig extension.android
             //设置通用依赖配置
             setDependencies extension.dependencies
     }
 
-    //设置lib配置
-    setMainDefaultConfig = {
+    //设置lib配置（只可以作为lib,不可单独调试）
+    setLibDefaultConfig = {
         extension ->
             extension.apply plugin: 'com.android.library'
             extension.description "lib"
             extension.apply plugin: 'com.jakewharton.butterknife'
             //设置通用Android配置
-            setAndroidConfig extension.android
+            setLibAndroidConfig extension.android
             //设置通用依赖配置
             setDependencies extension.dependencies
     }
 
-    //设置lib配置
-    setLibDefaultConfig = {
+    //设置lib配置（可作为project单独调试）
+    setAppOrLibDefaultConfig = {
         extension ->
-            if (isModuleDebug) {
+            if (project.ext.isModuleDebug) {
                 extension.apply plugin: 'com.android.application'
                 extension.description "app"
             } else {
@@ -45,21 +46,22 @@ project.ext {
             }
             extension.apply plugin: 'com.jakewharton.butterknife'
             //设置通用Android配置
-            setAndroidConfig extension.android
+            setAppOrLibAndroidConfig extension.android
             //设置通用依赖配置
             setDependencies extension.dependencies
     }
 
-    //设置android配置
-    setAndroidConfig = {
-        extension -> //extension 即 android 对象
-            extension.compileSdkVersion 29
-            extension.buildToolsVersion "29.0.2"
+    //设置app android配置
+    setAppAndroidConfig = {
+        extension -> //extension 相当于 android 对象
+            extension.compileSdkVersion project.ext.compileSdkVersion
+            extension.buildToolsVersion project.ext.buildToolsVersion
             extension.defaultConfig {
-                minSdkVersion 15
-                targetSdkVersion 29
-                versionCode 1
-                versionName "1.0"
+                applicationId project.ext.applicationId
+                minSdkVersion project.ext.minSdkVersion
+                targetSdkVersion project.ext.targetSdkVersion
+                versionCode project.ext.versionCode
+                versionName project.ext.versionName
 
                 testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -71,6 +73,74 @@ project.ext {
                 }
             }
 
+            extension.compileOptions {
+                sourceCompatibility JavaVersion.VERSION_1_8
+                targetCompatibility JavaVersion.VERSION_1_8
+            }
+    }
+
+    //设置lib android配置（只可以作为lib,不可单独调试）
+    setLibAndroidConfig = {
+        extension -> //extension 相当于 android 对象
+            extension.compileSdkVersion project.ext.compileSdkVersion
+            extension.buildToolsVersion project.ext.buildToolsVersion
+            extension.defaultConfig {
+                minSdkVersion project.ext.minSdkVersion
+                targetSdkVersion project.ext.targetSdkVersion
+                versionCode project.ext.versionCode
+                versionName project.ext.versionName
+
+                testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+                //ARouter 编译生成路由
+                javaCompileOptions {
+                    annotationProcessorOptions {
+                        arguments = [AROUTER_MODULE_NAME: extension.project.getName()]
+                    }
+                }
+            }
+    }
+
+    //设置lib android配置（可作为project单独调试）
+    setAppOrLibAndroidConfig = {
+        extension -> //extension 相当于 android 对象
+            extension.compileSdkVersion project.ext.compileSdkVersion
+            extension.buildToolsVersion project.ext.buildToolsVersion
+            extension.defaultConfig {
+                if (project.ext.isModuleDebug) {
+                    applicationId project.ext.applicationId
+                }
+                minSdkVersion project.ext.minSdkVersion
+                targetSdkVersion project.ext.targetSdkVersion
+                versionCode project.ext.versionCode
+                versionName project.ext.versionName
+
+                testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+                //ARouter 编译生成路由
+                javaCompileOptions {
+                    annotationProcessorOptions {
+                        arguments = [AROUTER_MODULE_NAME: extension.project.getName()]
+                    }
+                }
+            }
+
+            if (project.ext.isModuleDebug) {
+                extension.compileOptions {
+                    sourceCompatibility JavaVersion.VERSION_1_8
+                    targetCompatibility JavaVersion.VERSION_1_8
+                }
+            }
+
+            extension.sourceSets {
+                main {
+                    if (project.ext.isModuleDebug) {
+                        manifest.srcFile 'src/main/manifest/AndroidManifest.xml'
+                    } else {
+                        manifest.srcFile 'src/main/AndroidManifest.xml'
+                    }
+                }
+            }
     }
 
 
