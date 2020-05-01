@@ -9,7 +9,7 @@ project.ext {
     versionName = "1.0"
 
     //是否允许module单独调试
-    isModuleDebug = true
+    isModuleDebug = false
 
     //设置app配置
     setAppDefaultConfig = {

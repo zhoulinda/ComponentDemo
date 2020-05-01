@@ -19,7 +19,7 @@ public class MineDataProvider implements IMineDataProvider {
 
     @Override
     public String getMineData() {
-        return "我是mine模块中的数据";
+        return "***已获取到mine模块中的数据***";
     }
 
     @Override

@@ -18,6 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:text="退出登录" />
+        android:text="退出登录"
+        android:visibility="gone" />
 
 </LinearLayout>

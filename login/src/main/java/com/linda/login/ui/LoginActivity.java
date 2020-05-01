@@ -46,6 +46,7 @@ public class LoginActivity extends BaseActivity {
         int viewId = view.getId();
         if (viewId == R.id.login) {
             mLogin.setText("已登录");
+            finish();
         } else if (viewId == R.id.loginOut) {
 
         }
