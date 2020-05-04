@@ -42,9 +42,4 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         unbinder.unbind();
     }
-
-    @OnClick(R2.id.login)
-    public void onClick() {
-        ARouter.getInstance().build(RouterPaths.LOGIN_ACTIVITY).navigation();
-    }
 }

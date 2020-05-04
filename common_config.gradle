@@ -107,9 +107,6 @@ project.ext {
             extension.compileSdkVersion project.ext.compileSdkVersion
             extension.buildToolsVersion project.ext.buildToolsVersion
             extension.defaultConfig {
-                if (project.ext.isModuleDebug) {
-                    applicationId project.ext.applicationId
-                }
                 minSdkVersion project.ext.minSdkVersion
                 targetSdkVersion project.ext.targetSdkVersion
                 versionCode project.ext.versionCode
